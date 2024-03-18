@@ -6,6 +6,7 @@ const CarCard = ({ car }) => {
       <img src={car.image} alt={car.model} />
       <h3>{car.brand}</h3>
       <p>{car.model}</p>
+      <p>{car.price}</p>
       <p>Year: {car.year}</p>
     </div>
   );

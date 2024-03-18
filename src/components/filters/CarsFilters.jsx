@@ -8,7 +8,7 @@ const CarsFilters = ({ selectedBrand, onFilterChange, allCars }) => {
     cars.forEach((car) => {
       uniqueBrands[car.brand] = true;
     });
-    return Object.keys(uniqueBrands);
+    return ["", ...Object.keys(uniqueBrands)]; // Добавляем пустую строку в качестве пункта "All"
   };
 
   return (
@@ -19,10 +19,9 @@ const CarsFilters = ({ selectedBrand, onFilterChange, allCars }) => {
           value={selectedBrand}
           onChange={(e) => onFilterChange(e.target.value)}
         >
-          <option value="">All</option>
           {getUniqueBrands(allCars).map((brand) => (
             <option key={brand} value={brand}>
-              {brand}
+              {brand || "All"} {/* Если brand пустая строка, пишем "All" */}
             </option>
           ))}
         </select>

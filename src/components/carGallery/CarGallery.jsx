@@ -1,4 +1,5 @@
 import React from "react";
+import style from "./CarGallery.module.css"
 import { useSelector, useDispatch } from "react-redux";
 import {
   setFilterBrand,
@@ -22,6 +23,9 @@ const CarGallery = () => {
     dispatch(setFilterBrand(brand));
   };
 
+  
+ 
+
   const handlePageChange = (pageNumber) => {
     dispatch(setPage(pageNumber));
   };
@@ -29,6 +33,7 @@ const CarGallery = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     dispatch(setNewCar({ ...newCar, [name]: value }));
+   
   };
 
   const handleAddCar = () => {
@@ -39,17 +44,20 @@ const CarGallery = () => {
   const paginatedCars = allCars
     .filter((car) => filterBrand === "" || car.brand === filterBrand)
     .slice((page - 1) * carsPerPage, page * carsPerPage);
+    
 
   return (
-    <div className="car-gallery">
+    <div className={style.wrapper}>
+
+    <div className={style.cars_container}>
       <Filters
         selectedBrand={filterBrand}
         onFilterChange={handleFilterChange}
         allCars={allCars} // Передаем список всех автомобилей
       />
-      <div className="car-cards">
+      <div className={style.car_cards}>
         {paginatedCars.map((car) => (
-          <CarCard key={car.id} car={car} price={car.price} />
+          <CarCard  key={car.id} car={car} price={car.price} />
         ))}
       </div>
       <Pagination
@@ -62,7 +70,9 @@ const CarGallery = () => {
         onPageChange={handlePageChange}
       />
       <div className="add-car-form">
+        <div className={style.form}>
         <h2>Add a New Car</h2>
+
         <input
           type="text"
           name="brand"
@@ -91,8 +101,13 @@ const CarGallery = () => {
           value={newCar.price}
           onChange={handleInputChange}
         />
+        <div className={style.btn}>
+
         <button onClick={handleAddCar}>Add Car</button>
+        </div>
+        </div>
       </div>
+    </div>
     </div>
   );
 };

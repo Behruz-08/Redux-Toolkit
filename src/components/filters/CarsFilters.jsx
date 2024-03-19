@@ -1,4 +1,5 @@
 import React from "react";
+import style from "./CarsFilters.module.css"
 
 const CarsFilters = ({ selectedBrand, onFilterChange, allCars }) => {
   const getUniqueBrands = (cars) => {
@@ -12,16 +13,19 @@ const CarsFilters = ({ selectedBrand, onFilterChange, allCars }) => {
   };
 
   return (
-    <div className="filters">
+    <div className={style.filters}>
+      <h4>
+
+        Filter Brands:
+      </h4>
       <label>
-        Filter by Brand:
         <select
           value={selectedBrand}
           onChange={(e) => onFilterChange(e.target.value)}
         >
           {getUniqueBrands(allCars).map((brand) => (
             <option key={brand} value={brand}>
-              {brand || "All"} {/* Если brand пустая строка, пишем "All" */}
+              {brand || "All"} 
             </option>
           ))}
         </select>

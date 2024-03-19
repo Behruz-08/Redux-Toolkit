@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import carsData from "../../components/carsData/CarsData";
 
 const initialState = {
-  filterBrand: "",
+  filterBrand: '',
   page: 1,
   newCar: { brand: "", model: "", year: "", price: "" },
-  allCars: [],
+  // allCars: [],
+  allCars: carsData,
   carsPerPage: 27,
 };
 
@@ -15,8 +17,9 @@ const carGallerySlice = createSlice({
     setFilterBrand(state, action) {
       state.filterBrand = action.payload;
       state.page = 1;
-      state.carsPerPage = action.payload === "" ? 27 : 9; // Устанавливаем количество автомобилей на странице
+      state.carsPerPage= action.payload=== "" ? 27 : 9; 
     },
+   
     setPage(state, action) {
       state.page = action.payload;
     },
@@ -27,6 +30,7 @@ const carGallerySlice = createSlice({
       const newCarWithId = { ...action.payload, id: Date.now() };
       state.allCars.push(newCarWithId);
     },
+ 
   },
 });
 

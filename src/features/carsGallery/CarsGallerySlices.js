@@ -1,11 +1,14 @@
+
+
 import { createSlice } from "@reduxjs/toolkit";
 import carsData from "../../components/carsData/CarsData";
 
 const initialState = {
-  filterBrand: '',
+  filterBrand: "",
+  filterModel: "", 
+  filterPrice: "", 
   page: 1,
   newCar: { brand: "", model: "", year: "", price: "" },
-  // allCars: [],
   allCars: carsData,
   carsPerPage: 27,
 };
@@ -17,9 +20,16 @@ const carGallerySlice = createSlice({
     setFilterBrand(state, action) {
       state.filterBrand = action.payload;
       state.page = 1;
-      state.carsPerPage= action.payload=== "" ? 27 : 9; 
+      state.carsPerPage = action.payload === "" ? 27 : 9;
     },
-   
+    setFilterModel(state, action) { 
+      state.filterModel = action.payload;
+      state.page = 1;
+    },
+    setFilterPrice(state, action) { 
+      state.filterPrice = action.payload;
+      state.page = 1;
+    },
     setPage(state, action) {
       state.page = action.payload;
     },
@@ -30,11 +40,16 @@ const carGallerySlice = createSlice({
       const newCarWithId = { ...action.payload, id: Date.now() };
       state.allCars.push(newCarWithId);
     },
- 
   },
 });
 
-export const { setFilterBrand, setPage, setNewCar, addCar } =
-  carGallerySlice.actions;
+export const {
+  setFilterBrand,
+  setFilterModel, 
+  setFilterPrice, 
+  setNewCar,
+  addCar,
+  setPage
+} = carGallerySlice.actions;
 
 export default carGallerySlice.reducer;

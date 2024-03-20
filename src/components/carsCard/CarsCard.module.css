@@ -1,0 +1,11 @@
+.car_card{
+  padding: 10px;
+    box-shadow: 1px 2px 5px 1px #80919c;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: 1rem;
+ 
+ 
+  
+}

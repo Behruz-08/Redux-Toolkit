@@ -1,0 +1,33 @@
+.filters{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:  10px 0;
+    background-color: rgb(190, 243, 243);
+    gap: 10px;
+    /* border-bottom:10px solid  #80919c; */
+    box-shadow: 0.5px 5px #afc4d6;
+   
+   
+}
+
+.filters select{
+    width: 200px;
+    height: 50px;
+    border: none;
+    /* margin-bottom: 10px; */
+    font-size: medium;
+    color: #80919c;
+    /* position: fixed; */
+   top: 1.8rem;
+}
+
+
+
+.filters h4{
+    color: #80919c;
+    font-weight: 500;
+    font-size: 20px;
+
+
+}

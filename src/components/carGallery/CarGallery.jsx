@@ -1,73 +1,110 @@
 
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import style from "./CarGallery.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setFilterBrand,
+  setFilterModel,
+  setFilterPrice,
+  setPage,
+  setNewCar,
+  addCar,
+} from "../../../src/features/carsGallery/CarsGallerySlices";
 import CarCard from "../carsCard/CarsCard";
 import Filters from "../filters/CarsFilters";
 import Pagination from "../paginations/Paginations";
-import carsData from "../carsData/CarsData";
 
 const CarGallery = () => {
-  const [filterBrand, setFilterBrand] = useState("");
-  const [page, setPage] = useState(1);
-  const [newCar, setNewCar] = useState({
-    brand: "",
-    model: "",
-    year: "",
-    price: "",
-  });
-  const [allCars, setAllCars] = useState(carsData);
-  const [carsPerPage, setCarsPerPage] = useState(27); // Изначально установлено 27 автомобилей на страницу
+  const filterBrand = useSelector((state) => state.carGallery.filterBrand);
+  const filterModel = useSelector((state) => state.carGallery.filterModel);
+  const filterPrice = useSelector((state) => state.carGallery.filterPrice);
+  const page = useSelector((state) => state.carGallery.page);
+  const newCar = useSelector((state) => state.carGallery.newCar);
+  const allCars = useSelector((state) => state.carGallery.allCars);
+  const carsPerPage = useSelector((state) => state.carGallery.carsPerPage);
+  const dispatch = useDispatch();
+  
+  const [newCarInput, setNewCarInput] = useState({ brand: '', model: '', price: '' });
 
-  const handleAddCar = () => {
-    const newCarWithId = { ...newCar, id: Date.now() };
-    setAllCars([...allCars, newCarWithId]);
+  useEffect(() => {
+    if (newCar) {
+      dispatch(addCar(newCarInput));
+      dispatch(setNewCar(false)); 
+      setNewCarInput({ brand: '', model: '', price: '' });
+    }
+  }, [newCar, dispatch, newCarInput]);
+
+  const filterCars = (cars) => {
+    return cars.filter((car) => {
+      const brandMatch = filterBrand === "" || car.brand === filterBrand;
+      const modelMatch = filterModel === "" || (car.model && car.model.toLowerCase().includes(filterModel.toLowerCase()));
+      const priceMatch = filterPrice === "" || (car.price <= parseFloat(filterPrice));
+  
+      return brandMatch && modelMatch && priceMatch;
+    });
   };
 
-  const filteredCars = allCars.filter(
-    (car) => filterBrand === "" || car.brand === filterBrand
-  );
-
-  const handleFilterChange = (brand) => {
-    setFilterBrand(brand);
-    setPage(1);
-    // Устанавливаем количество отображаемых автомобилей в зависимости от выбранной категории
-    setCarsPerPage(brand === "" ? 27 : 9);
+  const handleFilterBrandChange = (brand) => {
+    dispatch(setFilterBrand(brand));
   };
+  
+  const handleFilterModelChange = (model) => {
+    dispatch(setFilterModel(model));
+  };
+  
+  const handleFilterPriceChange = (price) => {
+    dispatch(setFilterPrice(price));
+  };
+  
+ 
+
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setNewCarInput({ ...newCarInput, [name]: value });
+};
+
+
+const handleAddCar = () => {
+  dispatch(addCar(newCarInput));
+  setNewCarInput({ brand: '', model: '', price: '' });
+};
+
+
 
   const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
+    dispatch(setPage(pageNumber));
   };
+  
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewCar({ ...newCar, [name]: value });
-  };
-
-  // Вычисляем пагинированные автомобили на основе текущей страницы и количества автомобилей на странице
-  const paginatedCars = filteredCars.slice(
-    (page - 1) * carsPerPage,
-    page * carsPerPage
-  );
+  const paginatedCars = filterCars(allCars)
+    .slice((page - 1) * carsPerPage, page * carsPerPage);
 
   return (
-    <div className="car-gallery">
+    <div className={style.wrapper}>
       <Filters
-        selectedBrand={filterBrand}
-        onFilterChange={handleFilterChange}
-        allCars={allCars} // Передаем список всех автомобилей
-      />
-      <div className="car-cards">
+          filterModel={filterModel}
+          filterPrice={filterPrice}
+          onFilterBrandChange={handleFilterBrandChange}
+          onFilterModelChange={handleFilterModelChange}
+          onFilterPriceChange={handleFilterPriceChange}
+        />
+
+      <div className={style.car_cards}>
         {paginatedCars.map((car) => (
-          <CarCard key={car.id} car={car} price={car.price} />
+          <CarCard key={car.id} car={car} />
         ))}
       </div>
+
       <Pagination
         currentPage={page}
-        totalPages={Math.ceil(filteredCars.length / carsPerPage)}
+        totalPages={Math.ceil(filterCars(allCars).length / carsPerPage)}
         onPageChange={handlePageChange}
       />
-      <div className="add-car-form">
+
+<div className="add-car-form">
+        <div className={style.form}>
         <h2>Add a New Car</h2>
+
         <input
           type="text"
           name="brand"
@@ -96,7 +133,11 @@ const CarGallery = () => {
           value={newCar.price}
           onChange={handleInputChange}
         />
+        <div className={style.btn}>
+
         <button onClick={handleAddCar}>Add Car</button>
+        </div>
+        </div>
       </div>
     </div>
   );

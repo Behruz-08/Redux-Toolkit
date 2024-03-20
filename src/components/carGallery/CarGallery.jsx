@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from "react";
 import style from "./CarGallery.module.css";
 import { useSelector, useDispatch } from "react-redux";

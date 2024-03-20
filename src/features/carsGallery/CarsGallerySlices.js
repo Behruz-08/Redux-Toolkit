@@ -32,14 +32,24 @@ const carGallerySlice = createSlice({
     },
     setPage(state, action) {
       state.page = action.payload;
+      state.page = 1;
     },
     setNewCar(state, action) {
       state.newCar = action.payload;
+      state.page = 1;
     },
+    // addCar(state, action) {
+    //   const newCarWithId = { ...action.payload, id: Date.now() };
+    //   state.allCars.push(newCarWithId);
+    // },
     addCar(state, action) {
       const newCarWithId = { ...action.payload, id: Date.now() };
-      state.allCars.push(newCarWithId);
+      state.allCars = [...state.allCars, newCarWithId];
+      state.newCar = { brand: "", model: "", year: "", price: "" }; // Сбросить значения нового автомобиля
+      state.page = 1; // Переход на первую страницу после добавления
     },
+    
+    
   },
 });
 
